@@ -1,0 +1,59 @@
+main {
+    display: flex;
+    margin-left: 24%;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+@media screen and (max-width : 400px) {
+    main {
+        margin-left: 14%;
+    }
+}
+
+@media screen and (max-width : 300px) {
+    main {
+        margin-left: 0%;
+    }
+}
+
+input[type="checkbox"] {
+    transform: scale(1.5);
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + a {
+    text-decoration: line-through;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+div {
+    margin-bottom: 15px;
+}
+
+.espacioDiv {
+    margin-left: 24px;
+}
+
+.espacioAhref {
+    margin-left: 5px;
+}
+
+img {
+    width: 22px;
+    height: 22px;
+}
+
+a {
+    text-transform: none;
+}
+
+.pBy{
+    margin-top: -40px;
+    margin-bottom: 40px;
+    margin-left: 5px;
+    color: grey;
+}
