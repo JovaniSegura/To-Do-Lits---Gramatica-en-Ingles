@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     checkboxDivs.forEach((div) => {
         const checkbox = div.querySelector('input[type="checkbox"]');
         const link = div.querySelector('a');
-        
+
         if (checkbox && link) {
             const uniqueId = link.href;
 
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             checkbox.addEventListener('change', function () {
                 localStorage.setItem(uniqueId, checkbox.checked);
-                
+
                 // Actualizar el estilo del enlace asociado
                 if (checkbox.checked) {
                     link.style.textDecoration = 'line-through';
@@ -39,5 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Convertir todo el texto a minúsculas y Poner 1er letra en mayúscula
     document.querySelectorAll('a').forEach(function (a) {
         a.textContent = a.textContent.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+    });
+
+    // By Jovani Segura
+    const pBy = document.querySelectorAll('.pBy');
+    pBy.forEach(function (element) {
+        element.textContent = element.textContent.split(' ').map(word => {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        }).join(' ');
     });
 });
