@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const checkboxDivs = document.querySelectorAll('.espacioDiv');
     const progressBar = document.querySelector('.fixed-header .progress-bar');
     const progressText = document.querySelector('.fixed-header #progress-text');
     let totalCheckboxes = 0;
@@ -35,52 +34,106 @@ document.addEventListener('DOMContentLoaded', function () {
         updateProgressBar();
     }
 
-    checkboxDivs.forEach((div) => {
-        const checkbox = div.querySelector('input[type="checkbox"]');
-        const link = div.querySelector('a');
+    function capitalizeFirstLetter(text) {
+        return text.toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
 
-        if (checkbox && link) {
-            totalCheckboxes++;
-            const uniqueId = link.href;
+    function capitalizeFirstWord(str) {
+        if (!str) return str; // Maneja cadenas vacías
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
 
-            const savedState = localStorage.getItem(uniqueId);
-
-            if (savedState !== null) {
-                checkbox.checked = JSON.parse(savedState);
-                if (checkbox.checked) {
-                    checkedCheckboxes++;
-                    link.style.textDecoration = 'line-through';
-                    link.style.opacity = '0.6';
-                }
-            }
-
-            checkbox.addEventListener('change', function () {
-                updateCheckboxState(checkbox, link);
-            });
-
-            link.addEventListener('click', function (event) {
-                event.preventDefault();
-                if (!checkbox.checked) {
-                    updateCheckboxState(checkbox, link, true);
-                }
+    function loadContentFromJSON() {
+        const url = 'https://rentry.co/boretbkb/raw';
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const dynamicContent = document.getElementById('dynamic-content');
                 
-                setTimeout(() => {
-                    window.open(link.href, '_blank');
-                }, 100);
-            });
-        }
-    });
+                data.forEach(category => {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'centrar';
+                    
+                    const categoryTitle = document.createElement('h4');
+                    categoryTitle.textContent = capitalizeFirstWord(category.categoria) + ':';
+                    categoryDiv.appendChild(categoryTitle);
+                    
+                    category.enlaces.forEach(link => {
+                        const linkDiv = document.createElement('div');
+                        linkDiv.className = 'espacioDiv';
+                        
+                        linkDiv.innerHTML = `
+                            <label>
+                                <input type="checkbox" id="checkbox" data-unique-id="">
+                                <span class="espacioAhref logos--youtube-icon"></span>
+                                <a href="${link.url}" target="_blank">
+                                    ${capitalizeFirstWord(link.titulo)}
+                                </a>
+                            </label>
+                        `;
+                        
+                        categoryDiv.appendChild(linkDiv);
+                    });
+                    
+                    dynamicContent.appendChild(categoryDiv);
+                });
+                
+                initializeCheckboxes();
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
-    updateProgressBar();
+    function initializeCheckboxes() {
+        const checkboxDivs = document.querySelectorAll('.espacioDiv');
+        totalCheckboxes = checkboxDivs.length;
+        checkedCheckboxes = 0;
 
-    document.querySelectorAll('a').forEach(function (a) {
-        a.textContent = a.textContent.toLowerCase().replace(/^\w/, c => c.toUpperCase());
-    });
+        checkboxDivs.forEach((div) => {
+            const checkbox = div.querySelector('input[type="checkbox"]');
+            const link = div.querySelector('a');
 
-    const pBy = document.querySelectorAll('.pBy');
-    pBy.forEach(function (element) {
-        element.textContent = element.textContent.split(' ').map(word => {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        }).join(' ');
-    });
+            if (checkbox && link) {
+                const uniqueId = link.href;
+                const savedState = localStorage.getItem(uniqueId);
+
+                if (savedState !== null) {
+                    checkbox.checked = JSON.parse(savedState);
+                    if (checkbox.checked) {
+                        checkedCheckboxes++;
+                        link.style.textDecoration = 'line-through';
+                        link.style.opacity = '0.6';
+                    }
+                }
+
+                checkbox.addEventListener('change', function () {
+                    updateCheckboxState(checkbox, link);
+                });
+
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    if (!checkbox.checked) {
+                        updateCheckboxState(checkbox, link, true);
+                    }
+                    
+                    setTimeout(() => {
+                        window.open(link.href, '_blank');
+                    }, 100);
+                });
+            }
+        });
+
+        updateProgressBar();
+    }
+
+    loadContentFromJSON();
+
+    // Capitalize the first letter of the first word in .pBy elements
+    const pByYo = document.querySelector('.pbyYo');
+    if (pByYo) {
+        pByYo.textContent = capitalizeFirstLetter(pByYo.textContent);
+    }
 });

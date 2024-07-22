@@ -73,9 +73,8 @@ a {
     text-decoration: none;
 }
 
-
 .span {
-    height: 20px;
+    height: 1px;
 }
 
 .logos--youtube-icon {
@@ -89,7 +88,11 @@ a {
 
 .pBy {
     color: grey;
-    text-decoration:underline;
+    text-decoration: underline;
+}
+
+.pbyYo {
+    text-transform: capitalize;
 }
 
 /* Barra de progreso */
@@ -98,7 +101,6 @@ a {
     /* align-items: center; */
     width: 100%;
     margin-bottom: 20px;
-
 }
 
 .progress-label {
